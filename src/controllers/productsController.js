@@ -12,7 +12,10 @@ export default class ProductsController {
     }
 
     static listProductBySearch = (req, res) => {
-        products.find( {"title": req.body.title})
+        let search = req.query.title;
+        products.find( {"title": {
+            $in: [new RegExp(`^(${search})\X*`, 'i')]
+    }})
         .populate()
         .exec((err, product) => {
             if (err) console.log(err);
@@ -20,17 +23,7 @@ export default class ProductsController {
         })
     }
     
-    /*
-    static getProductMediumCard = (req, res) => {
-        products.find()
-        .limit(4)    
-        .populate()
-        .exec((err, products) => {
-            if(err) console.log(err);
-            if(products) res.status(200).json(products);
-        })
-        */
-    
+
     static getProductSingleCard = (req, res) => {
         products.count()
         .exec((err, count) => {
