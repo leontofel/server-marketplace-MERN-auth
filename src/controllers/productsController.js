@@ -51,15 +51,11 @@ export default class ProductsController {
 
     static listProductById = (req, res) => {
         const {id} = req.params;
-             products.find({"_id": mongoose.Types.ObjectId(id)})
-             .populate()
-            .exec((err, products) => {
-                if (err) {
-                    res.status(400).send({ message: `${err.message} - product id was not found` })
-                } else {
-                   res.status(200).send(products);
-                }
-            })
+            products.findOne({"_id": mongoose.Types.ObjectId(id)}).populate()
+            .exec((err, product) => {
+                if (err) res.status(400).send({ message: `${err.message} - product id was not found` })
+                if (product) res.status(200).json(product);
+            });
         
     }
 
